@@ -3,8 +3,12 @@ import 'package:ukl_2025/UklCoba/SplashScreen.dart';
 import 'package:ukl_2025/UklCoba/Profile.dart';
 import 'package:ukl_2025/UklCoba/Transaction.dart';
 import 'package:ukl_2025/ukltes.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter bindings are initialized and locale data is ready
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   runApp(const MyApp());
 }
 
