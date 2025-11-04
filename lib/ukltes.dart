@@ -11,7 +11,7 @@ void main() async {
   // Inisialisasi locale Indonesia untuk DateFormat
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
-  
+
   runApp(const UklTes25());
 }
 
@@ -48,19 +48,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _message = 'Selamat datang, silakan lakukan presensi.';
   bool _isLoading = false;
 
-  // Inisialisasi DateFormat sebagai variable untuk performa lebih baik
-  late final DateFormat _dateFormatter;
-  late final DateFormat _timeFormatter;
-  late final DateFormat _attendanceTimeFormatter;
-
-  @override
-  void initState() {
-    super.initState();
-    // Inisialisasi formatter sekali saja
-    _dateFormatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
-    _timeFormatter = DateFormat('HH:mm:ss');
-    _attendanceTimeFormatter = DateFormat('HH:mm');
-  }
+  // Inisialisasi DateFormat langsung
+  final DateFormat _dateFormatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+  final DateFormat _timeFormatter = DateFormat('HH:mm:ss');
+  final DateFormat _attendanceTimeFormatter = DateFormat('HH:mm');
 
   // --- Fungsi Utama Presensi (Simulasi Jaringan) ---
   Future<void> handleAttendance(String type) async {
@@ -80,12 +71,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       if (type == 'masuk') {
         if (_checkInTime != null) {
           // Gagal: Sudah presensi masuk
-          _message = '❌ Anda sudah melakukan Presensi Masuk pada $_checkInTime.';
+          _message =
+              '❌ Anda sudah melakukan Presensi Masuk pada $_checkInTime.';
         } else {
           // Sukses: Presensi Masuk
           _checkInTime = currentTime;
           _message = '✅ Presensi Masuk berhasil dicatat pada $currentTime.';
-          _checkOutTime = null; // Reset pulang jika masuk lagi di hari yang sama (opsional)
+          _checkOutTime =
+              null; // Reset pulang jika masuk lagi di hari yang sama (opsional)
         }
       } else if (type == 'pulang') {
         if (_checkInTime == null) {
@@ -93,7 +86,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _message = '❌ Anda harus melakukan Presensi Masuk terlebih dahulu.';
         } else if (_checkOutTime != null) {
           // Gagal: Sudah presensi pulang
-          _message = '❌ Anda sudah melakukan Presensi Pulang pada $_checkOutTime.';
+          _message =
+              '❌ Anda sudah melakukan Presensi Pulang pada $_checkOutTime.';
         } else {
           // Sukses: Presensi Pulang
           _checkOutTime = currentTime;
@@ -123,7 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // Widget untuk Kartu Status Presensi (Datang/Pulang)
   Widget _buildAttendanceStatusCard() {
     final now = DateTime.now();
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       margin: const EdgeInsets.only(top: 20, bottom: 30),
@@ -143,7 +137,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Tanggal dan Waktu Sekarang
           Text(
             _dateFormatter.format(now),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
           ),
           Text(
             _timeFormatter.format(now),
@@ -157,12 +155,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               _buildTimeIndicator(
                 label: 'Datang',
                 time: _checkInTime ?? '--:--',
-                color: _checkInTime != null ? Colors.green.shade600 : Colors.grey,
+                color: _checkInTime != null
+                    ? Colors.green.shade600
+                    : Colors.grey,
               ),
               _buildTimeIndicator(
                 label: 'Pulang',
                 time: _checkOutTime ?? '--:--',
-                color: _checkOutTime != null ? Colors.red.shade600 : Colors.grey,
+                color: _checkOutTime != null
+                    ? Colors.red.shade600
+                    : Colors.grey,
               ),
             ],
           ),
@@ -172,12 +174,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   // Widget Pembantu untuk Indikator Waktu
-  Widget _buildTimeIndicator({required String label, required String time, required Color color}) {
+  Widget _buildTimeIndicator({
+    required String label,
+    required String time,
+    required Color color,
+  }) {
     return Column(
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
         const SizedBox(height: 5),
         Text(
@@ -193,8 +203,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   // Widget untuk Tombol Aksi dalam Grid
-  Widget _buildActionButton(
-      {required IconData icon, required String label, required Color color, VoidCallback? onTap}) {
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    VoidCallback? onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(15),
@@ -204,12 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Colors.grey.shade200),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.1),
-              blurRadius: 5,
-            ),
-          ],
+          boxShadow: [BoxShadow(color: color.withOpacity(0.1), blurRadius: 5)],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +228,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
@@ -275,10 +288,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           Text(
             _userRole,
-            style: TextStyle(
-              color: Colors.blue.shade100,
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.blue.shade100, fontSize: 16),
           ),
         ],
       ),
@@ -296,7 +306,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           // Konten Utama (di ScrollView agar bisa digulir)
           Padding(
-            padding: const EdgeInsets.only(top: 210), // Sesuaikan dengan tinggi header
+            padding: const EdgeInsets.only(
+              top: 210,
+            ), // Sesuaikan dengan tinggi header
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -319,21 +331,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     crossAxisSpacing: 15,
                     mainAxisSpacing: 15,
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(), // Non-scrollable grid
+                    physics:
+                        const NeverScrollableScrollPhysics(), // Non-scrollable grid
                     children: <Widget>[
                       // 1. Absen Datang (Check-in)
                       _buildActionButton(
                         icon: Icons.fingerprint,
                         label: 'Absen Datang',
                         color: Colors.green.shade600,
-                        onTap: _isLoading ? null : () => handleAttendance('masuk'),
+                        onTap: _isLoading
+                            ? null
+                            : () => handleAttendance('masuk'),
                       ),
                       // 2. Absen Pulang (Check-out)
                       _buildActionButton(
                         icon: Icons.exit_to_app,
                         label: 'Absen Pulang',
                         color: Colors.red.shade600,
-                        onTap: _isLoading ? null : () => handleAttendance('pulang'),
+                        onTap: _isLoading
+                            ? null
+                            : () => handleAttendance('pulang'),
                       ),
                       // 3. Perizinan
                       _buildActionButton(
@@ -341,7 +358,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         label: 'Perizinan',
                         color: Colors.orange.shade600,
                         onTap: () {
-                          setState(() => _message = 'Navigasi ke halaman Perizinan...');
+                          setState(
+                            () => _message = 'Navigasi ke halaman Perizinan...',
+                          );
                         },
                       ),
                       // 4. Jadwal Pelajaran
@@ -350,7 +369,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         label: 'Jadwal Pelajaran',
                         color: Colors.purple.shade600,
                         onTap: () {
-                          setState(() => _message = 'Navigasi ke halaman Jadwal...');
+                          setState(
+                            () => _message = 'Navigasi ke halaman Jadwal...',
+                          );
                         },
                       ),
                       // 5. Jurnal Mengajar
@@ -359,7 +380,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         label: 'Jurnal Mengajar',
                         color: Colors.cyan.shade600,
                         onTap: () {
-                          setState(() => _message = 'Navigasi ke halaman Jurnal...');
+                          setState(
+                            () => _message = 'Navigasi ke halaman Jurnal...',
+                          );
                         },
                       ),
                       // 6. Ambil Foto (Simulasi fitur tambahan)
@@ -368,7 +391,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         label: 'Ambil Foto',
                         color: Colors.blueGrey.shade600,
                         onTap: () {
-                          setState(() => _message = 'Simulasi fitur kamera/ambil foto...');
+                          setState(
+                            () => _message =
+                                'Simulasi fitur kamera/ambil foto...',
+                          );
                         },
                       ),
                     ],
@@ -389,7 +415,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Histori'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Pengaturan'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Pengaturan',
+          ),
         ],
         onTap: (index) {
           final labels = ['Home', 'Histori', 'Profil', 'Pengaturan'];
